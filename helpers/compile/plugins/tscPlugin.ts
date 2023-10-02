@@ -20,6 +20,7 @@ function bundleTypeDefinitions(filename: string, outfile: string) {
         'decimal.js',
         'detect-runtime',
         'sql-template-tag',
+        '@prisma/driver-adapter-utils',
         '@opentelemetry/api',
         '@prisma/internals',
         '@prisma/generator-helper',
