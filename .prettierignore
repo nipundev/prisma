@@ -1,6 +1,7 @@
 pnpm-lock.yaml
 dist/
 /.prisma
+/.github/renovate.json
 /packages/cli/build
 /packages/cli/prisma-client
 /packages/cli/preinstall
@@ -9,4 +10,5 @@ dist/
 /packages/client/declaration
 /packages/client/scripts/default-index.js
 /reproductions
-.cache
+.idea/
+.vscode/
