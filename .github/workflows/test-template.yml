@@ -159,7 +159,7 @@ jobs:
           skip-tsc: false
 
       # Run the functional test suite
-      - run: pnpm run test:functional --silent --shard ${{ matrix.shard }}
+      - run: pnpm run test:functional --silent --shard ${{ matrix.shard }} --engine-type ${{ matrix.queryEngine }}
         if: ${{ contains(inputs.jobsToRun, '-all-') || contains(inputs.jobsToRun, '-client-') }}
         working-directory: packages/client
       # And run  all the other tests (except the types tests)
@@ -275,6 +275,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        engine-type: ['library', 'wasm']
         flavor: ['js_pg', 'js_neon', 'js_libsql', 'js_planetscale']
         shard: ['1/6', '2/6', '3/6', '4/6', '5/6', '6/6']
         node: [20] #[16, 18, 20]
@@ -307,7 +308,7 @@ jobs:
           pnpm-version: ${{ inputs.pnpmVersion }}
           skip-tsc: false
 
-      - run: pnpm run test:functional --flavor ${{ matrix.flavor }} --shard ${{ matrix.shard }} --runInBand
+      - run: pnpm run test:functional --flavor ${{ matrix.flavor }} --shard ${{ matrix.shard }} --engine-type ${{ matrix.engine-type }} --runInBand
         working-directory: packages/client
         env:
           PRISMA_DISABLE_QUAINT_EXECUTORS: true, # ensures quaint runs no queries
@@ -380,7 +381,7 @@ jobs:
       - run: pnpm run test:memory
         working-directory: packages/client
 
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v7
         if: ${{ failure() && github.event_name == 'pull_request' }}
         id: upload-report
         env:
@@ -1014,7 +1015,7 @@ jobs:
           skip-tsc: true
 
       - name: Test packages/client
-        run: pnpm run test:functional:code --silent --shard ${{matrix.shard}}
+        run: pnpm run test:functional:code --silent --shard ${{ matrix.shard }} --engine-type ${{ matrix.queryEngine }}
         working-directory: packages/client
         env:
           # allow Node.js to allocate at most 14GB of heap on macOS and 7GB on Windows
